@@ -22,8 +22,6 @@ selOpt = sidebar.selectbox("Choose What to do?", choices)
 
 def intro():
     pass
-st.header("Object tracking is the process of locating and following one or more objects over time using a camera.It has a variety of uses, including human-computer interaction, security and surveillance, video communication,")
-
 
 def saveImage():
     img_name = st.text_input("Enter name of Image")
