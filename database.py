@@ -14,6 +14,15 @@ class Image(Base):
     filename = Column(String)
 
 
+class Mask(Base):
+
+    __tablename__ = "mask"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    filename = Column(String)
+
+
 if __name__ == "__main__":
     engine = create_engine('sqlite:///db.sqlite3')
     Base.metadata.create_all(engine)

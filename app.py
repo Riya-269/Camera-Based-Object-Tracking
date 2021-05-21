@@ -3,7 +3,7 @@ import streamlit as st
 from PIL import Image
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from database import Image as ImageModel
+from database import Image as ImageModel, Mask as MaskModel
 import cv2
 
 engine = create_engine('sqlite:///db.sqlite3')
@@ -60,28 +60,49 @@ def createMask():
 
     col1, col2 = st.beta_columns(2)
     org_img = col1.image([])
-
-    col3, col4 = st.beta_columns(2)
-    col3.slider(label="v1_min", max_value=255)
-    col3.slider(label="v2_min", max_value=255)
-    col3.slider(label="v3_min", max_value=255)
-
-    col4.slider(label="v1_max", max_value=255, value=255)
-    col4.slider(label="v2_max", max_value=255, value=255)
-    col4.slider(label="v3_max", max_value=255, value=255)
+    mask_img = col2.image([])
 
     if selName:
         path = sess.query(ImageModel).filter_by(name=selName).first().filename
-        org_img.image(path)
-    create_mask_btn = st.checkbox("Create Mask")
 
-    if create_mask_btn:
-        pass
-        # thresh = cv2.inRange(
-        #     frame_to_thresh,
-        #     (sliders["v1_min"], sliders["v2_min"], sliders["v3_min"]),
-        #     (sliders["v1_max"], sliders["v2_max"], sliders["v3_max"]),
-        # )
+        hsv_image = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2HSV)
+        org_img.image(path)
+        create_mask_btn = st.checkbox("Create Mask")
+        mask_name = st.text_input('Mask Name')
+        save_btn = st.button('Save Mask')
+
+        if create_mask_btn:
+            col3, col4 = st.beta_columns(2)
+            v1_min = col3.slider(label="v1_min", max_value=255)
+            v2_min = col3.slider(label="v2_min", max_value=255)
+            v3_min = col3.slider(label="v3_min", max_value=255)
+
+            v1_max = col4.slider(label="v1_max", max_value=255, value=255)
+            v2_max = col4.slider(label="v2_max", max_value=255, value=255)
+            v3_max = col4.slider(label="v3_max", max_value=255, value=255)
+
+            while create_mask_btn:
+                thresh = cv2.inRange(
+                    hsv_image,
+                    (v1_min, v2_min, v3_min),
+                    (v1_max, v2_max, v3_max),
+                )
+                mask_img.image(thresh)
+
+            if save_btn:
+                try:
+                    # to save image file in uploads folder
+                    path = "uploads/"+mask_name+".png"
+                    cv2.imwrite(path, thresh)
+
+                    # to save image in database
+                    img_data = MaskModel(name=mask_name, filename=path)
+                    sess.add(img_data)
+                    sess.commit()
+
+                    st.success("Masked Image Saved")
+                except:
+                    st.error('Something went wrong')
 
 
 if selOpt == choices[0]:
