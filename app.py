@@ -21,7 +21,6 @@ sidebar.header("Choose your option")
 choices = ["Project Overwiew", "Upload Image", "Create Mask"]
 selOpt = sidebar.selectbox("Choose What to do?", choices)
 
-
 def intro():
     pass
 
