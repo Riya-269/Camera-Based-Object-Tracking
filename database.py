@@ -13,6 +13,14 @@ class Image(Base):
     name = Column(String)
     filename = Column(String)
 
+class Video(Base):
+
+    __tablename__ = "videos"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    filename = Column(String    )
+
 
 class Mask(Base):
 
