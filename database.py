@@ -13,13 +13,14 @@ class Image(Base):
     name = Column(String)
     filename = Column(String)
 
+
 class Video(Base):
 
     __tablename__ = "videos"
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    filename = Column(String    )
+    filename = Column(String)
 
 
 class Mask(Base):
@@ -29,6 +30,7 @@ class Mask(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     filename = Column(String)
+    mask_values = Column(String)
 
 
 if __name__ == "__main__":

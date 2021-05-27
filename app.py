@@ -109,7 +109,7 @@ def createMask():
         org_img.image(path)
         create_mask_btn = st.checkbox("Create Mask")
         mask_name = st.text_input('Mask Name')
-        save_btn = st.checkbox('Save Mask')
+        save_btn = st.button('Save Mask')
 
         if create_mask_btn:
             col3, col4 = st.beta_columns(2)
@@ -129,20 +129,24 @@ def createMask():
                 )
                 mask_img.image(thresh)
 
-            if save_btn:
-                try:
-                    # to save image file in uploads folder
-                    path = "uploads/"+mask_name+".png"
-                    cv2.imwrite(path, thresh)
+                if save_btn:
+                    try:
+                        # to save image file in uploads folder
+                        path = "uploads/"+mask_name+".png"
+                        cv2.imwrite(path, thresh)
 
-                    # to save image in database
-                    img_data = MaskModel(name=mask_name, filename=path)
-                    sess.add(img_data)
-                    sess.commit()
+                        mask_values_string = f"{str(v1_min)} {str(v2_min)} {str(v3_min)} {str(v1_max)} {str(v2_max)} {str(v3_max)}"
 
-                    st.success("Masked Image Saved")
-                except:
-                    st.error('Something went wrong')
+                        # to save image in database
+                        img_data = MaskModel(
+                            name=mask_name, filename=path, mask_values=mask_values_string)
+                        sess.add(img_data)
+                        sess.commit()
+
+                        st.success("Masked Image Saved")
+                    except:
+                        st.error('Something went wrong')
+                    break
 
 
 def trackObject():
