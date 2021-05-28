@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from database import Image as ImageModel, Mask as MaskModel
 import cv2
+import tempfile
 
 engine = create_engine('sqlite:///db.sqlite3')
 Session = sessionmaker(bind=engine)
@@ -24,6 +25,31 @@ selOpt = sidebar.selectbox("Choose What to do?", choices)
 
 def intro():
     pass
+
+
+def saveVideo():
+    vid_name = st.text_input("Enter name of Image")
+    vid_file = st.file_uploader("Upload your Image")
+    btn = st.button("Submit")
+
+    if vid_file:
+        t_file = tempfile.NamedTemporaryFile(destroy=False)
+        t_file.write(vid_file.read())
+
+        if btn and vid_name:
+            cap = cv2.VideoCapture(t_file.name)
+            ret, frame = cap.read()
+            shape = frame.shape()
+            codec = cv2.VideoWriter_fourcc(*"XVID")
+            vid_path = "uploads/"+vid_name+".mp4"
+            out = cv2.VideoWriter(vid_path, codec, 30, (shape[1], shape[0]))
+            while ret:
+                out.write(frame)
+
+                ret, frame = cap.read()
+
+            cap.release()
+            out.release()
 
 def saveImage():
     img_name = st.text_input("Enter name of Image")
