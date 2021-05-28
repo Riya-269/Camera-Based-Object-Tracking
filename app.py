@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from database import Image as ImageModel, Mask as MaskModel, Video as VideoModel
 import cv2
 import tempfile
+from objectTracking import ObjectTracker
 
 engine = create_engine('sqlite:///db.sqlite3')
 Session = sessionmaker(bind=engine)
@@ -155,11 +156,14 @@ def trackObject():
 
     col1, col2 = st.beta_columns(2)
 
-    col1.selectbox(
+    selImage = col1.selectbox(
         options=[image.name for image in images], label="Select Mask")
-    col2.selectbox(
+    selVideo = col2.selectbox(
         options=[video.name for video in videos], label="Select Video")
 
+    imgObj = sess.query(MaskModel).filter_by(name = selImage).first()
+    st.write(imgObj.mask_values)
+    # source = ObjectTracker()
 
 if selOpt == choices[0]:
     intro()

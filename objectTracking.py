@@ -1,23 +1,29 @@
 import cv2
+from imutils.video import VideoStream
 
+class ObjectTracker:
 
-def trackObject(mask_values, video="None"):
+    def __init__(self, mask_values, video):
+        self.greenLower = mask_values[:3]
+        self.greenUpper = mask_values[3:]
+        
+        if video:
+            self.cap = cv2.VideoCapture(video)
 
-    cap = None
+        else:
+            self.cap = VideoStream(src=0).start()
 
-    if video:
-        cap = cv2.VideoCapture(video)
+    def __del__(self):
+        self.cap.release()
 
-    else:
-        cap = cv2.VideoCapture(0)
+    def startTracking(mask_values, video="None"):
 
-    while True:
+        while True:
 
-        ret, frame = cap.read()
+            ret, frame = cap.read()
 
-        if ret:
-            yield frame
+            if ret:
+                yield frame
 
-        cv2.waitKey(0)
+            cv2.waitKey(0)
 
-    cap.release()
