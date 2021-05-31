@@ -30,13 +30,15 @@ def intro():
     st.markdown("""Camera based object tracking is the process of locating a moving object  over time using a camera. Video tracking can be a time-consuming process due to the amount of data that is contained in video. Adding further to the complexity is the possible need to use object recognition techniques for tracking, a challenging problem in its own right.The objective of video tracking is to associate target objects in consecutive video frames. The association can be especially difficult when the objects are moving fast relative to the frame rate. Another situation that increases the complexity of the problem is when the tracked object changes orientation over time.""")
 
     col1 = st.beta_columns(1)
+    
+    st.video('example.mp4')
 
     st.markdown(""" 
-    ###Features of project
-    1.Upload Image
-    2.Create MASK OF THE IMAGE
-    3.UPLOAD VEDIO
-    4.TRACK OBJECT WITH VEDIO
+    ### Features of project
+    1. Upload Image
+    2. Create MASK OF THE IMAGE
+    3. UPLOAD VIDEO
+    4. TRACK OBJECT WITH VIDEO
     """)
 
 def saveVideo():

@@ -138,7 +138,7 @@ def trackObject(greenLower=(30, 76, 45), greenUpper=(67, 182, 197), video=None):
 
         # show the frame to our screen and increment the frame counter
         cv2.imshow("Frame", frame)
-        key = cv2.waitKey(50) & 0xFF
+        key = cv2.waitKey(20) & 0xFF
         counter += 1
 
         # if the 'q' key is pressed, stop the loop
