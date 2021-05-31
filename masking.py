@@ -158,4 +158,4 @@ def trackObject(greenLower=(30, 76, 45), greenUpper=(67, 182, 197), video=None):
 
 
 if __name__ == "__main__":
-    trackObject(video = 'example.mp4')
+    trackObject(greenLower = (0, 80, 58), greenUpper = (6, 255, 255), video = 'example2.mp4')
