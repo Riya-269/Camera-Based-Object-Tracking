@@ -31,11 +31,11 @@ def intro():
     col1 = st.beta_columns(1)
 
     st.markdown(""" 
-    ###Features of project
-    1.Upload Image
-    2.Create MASK OF THE IMAGE
-    3.UPLOAD VEDIO
-    4.TRACK OBJECT WITH VEDIO
+    ### Features of project
+    1. Upload Image
+    2. Create MASK OF THE IMAGE
+    3. UPLOAD VEDEO
+    4. TRACK OBJECT WITH VEDEO
     """)
 
 def saveVideo():
