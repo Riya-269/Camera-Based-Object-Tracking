@@ -32,7 +32,7 @@ def intro():
 
     col1 = st.beta_columns(1)
 
-    # st.video('example.mp4')
+    st.video('example3.mp4')
 
     st.markdown(""" 
     ### Features of project
@@ -184,7 +184,8 @@ def trackObject():
     window = st.image([])
     if btn:
         st.text(imgObj)
-        frame = tracker(greenLower=mask_values[:3], greenUpper=mask_values[3:],video=vidObj.filename)
+        frame = tracker(
+            greenLower=mask_values[:3], greenUpper=mask_values[3:], video=vidObj.filename)
         while next(frame).any():
             window.image(next(frame))
 
