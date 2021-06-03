@@ -137,13 +137,15 @@ def trackObject(greenLower=(30, 76, 45), greenUpper=(67, 182, 197), video=None):
         )
 
         # show the frame to our screen and increment the frame counter
-        cv2.imshow("Frame", frame)
+        # cv2.imshow("Frame", frame)
         key = cv2.waitKey(20) & 0xFF
         counter += 1
 
         # if the 'q' key is pressed, stop the loop
-        if key == ord("q"):
-            break
+        # if key == ord("q"):
+        #     break
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        yield frame
 
     # if we are not using a video file, stop the camera video stream
     if not video:
@@ -154,8 +156,9 @@ def trackObject(greenLower=(30, 76, 45), greenUpper=(67, 182, 197), video=None):
         vs.release()
 
     # close all windows
-    cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
-    trackObject(greenLower = (0, 80, 58), greenUpper = (6, 255, 255), video = 'example2.mp4')
+    trackObject(greenLower=(0, 80, 58), greenUpper=(
+        6, 255, 255), video='example2.mp4')

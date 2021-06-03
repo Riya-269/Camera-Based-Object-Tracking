@@ -1,4 +1,5 @@
 from altair.vegalite.v4.api import value
+from imutils import video
 import streamlit as st
 from PIL import Image
 from sqlalchemy.orm import sessionmaker
@@ -6,7 +7,7 @@ from sqlalchemy import create_engine
 from database import Image as ImageModel, Mask as MaskModel, Video as VideoModel
 import cv2
 import tempfile
-from objectTracking import ObjectTracker
+from masking import trackObject as tracker
 
 engine = create_engine('sqlite:///db.sqlite3')
 Session = sessionmaker(bind=engine)
@@ -30,8 +31,8 @@ def intro():
     st.markdown("""Camera based object tracking is the process of locating a moving object  over time using a camera. Video tracking can be a time-consuming process due to the amount of data that is contained in video. Adding further to the complexity is the possible need to use object recognition techniques for tracking, a challenging problem in its own right.The objective of video tracking is to associate target objects in consecutive video frames. The association can be especially difficult when the objects are moving fast relative to the frame rate. Another situation that increases the complexity of the problem is when the tracked object changes orientation over time.""")
 
     col1 = st.beta_columns(1)
-    
-    st.video('example.mp4')
+
+    # st.video('example.mp4')
 
     st.markdown(""" 
     ### Features of project
@@ -40,6 +41,7 @@ def intro():
     3. UPLOAD VIDEO
     4. TRACK OBJECT WITH VIDEO
     """)
+
 
 def saveVideo():
     vid_name = st.text_input("Enter name of Video")
@@ -77,6 +79,7 @@ def saveVideo():
                 except Exception as e:
                     print(e)
                     st.error('An error occured')
+
 
 def saveImage():
     img_name = st.text_input("Enter name of Image")
@@ -172,9 +175,19 @@ def trackObject():
     selVideo = col2.selectbox(
         options=[video.name for video in videos], label="Select Video")
 
-    imgObj = sess.query(MaskModel).filter_by(name = selImage).first()
+    imgObj = sess.query(MaskModel).filter_by(name=selImage).first()
+    vidObj = sess.query(VideoModel).filter_by(name=selVideo).first()
+
+    mask_values = tuple(map(int, imgObj.mask_values.split()))
     st.write(imgObj.mask_values)
-    # source = ObjectTracker()
+    btn = st.checkbox('Start Tracking')
+    window = st.image([])
+    if btn:
+        st.text(imgObj)
+        frame = tracker(greenLower=mask_values[:3], greenUpper=mask_values[3:],video=vidObj.filename)
+        while next(frame).any():
+            window.image(next(frame))
+
 
 if selOpt == choices[0]:
     intro()
