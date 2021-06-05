@@ -21,7 +21,7 @@ sidebar = st.sidebar
 
 sidebar.header("Choose your option")
 choices = ["Project Overwiew", "Upload Image",
-           "Create Mask", "Upload Video", "Track Object with Video"]
+           "Create Mask", "Upload Video", "Track Object with Video", "Track object with webcam"]
 selOpt = sidebar.selectbox("Choose What to do?", choices)
 
 
@@ -29,9 +29,12 @@ def intro():
     st.subheader("INRODUCTION")
     st.markdown("""Camera based object tracking is the process of locating a moving object  over time using a camera. Video tracking can be a time-consuming process due to the amount of data that is contained in video. Adding further to the complexity is the possible need to use object recognition techniques for tracking, a challenging problem in its own right.The objective of video tracking is to associate target objects in consecutive video frames. The association can be especially difficult when the objects are moving fast relative to the frame rate. Another situation that increases the complexity of the problem is when the tracked object changes orientation over time.""")
 
+    st.subheader("For Example:")
+
     col1 = st.beta_columns(1)
     
-    st.video('example3.mp4')
+    st.image('example.mp5.gif')
+
 
     st.markdown(""" 
     ### Features of project
@@ -39,6 +42,7 @@ def intro():
     2. Create MASK OF THE IMAGE
     3. UPLOAD VIDEO
     4. TRACK OBJECT WITH VIDEO
+    5. TRACK OBJECT WITH WEBCAM
     """)
 
 def saveVideo():
@@ -176,6 +180,7 @@ def trackObject():
     st.write(imgObj.mask_values)
     # source = ObjectTracker()
 
+
 if selOpt == choices[0]:
     intro()
 elif selOpt == choices[1]:
@@ -185,4 +190,6 @@ elif selOpt == choices[2]:
 elif selOpt == choices[3]:
     saveVideo()
 elif selOpt == choices[4]:
+    trackObject()
+elif selOpt == choices[5]:
     trackObject()
