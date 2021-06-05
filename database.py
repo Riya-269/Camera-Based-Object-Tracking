@@ -30,6 +30,7 @@ class Mask(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     filename = Column(String)
+    orgimage = Column(String)
     mask_values = Column(String)
 
 

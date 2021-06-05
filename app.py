@@ -151,20 +151,21 @@ def createMask():
                 if save_btn:
                     try:
                         # to save image file in uploads folder
-                        path = "uploads/"+mask_name+".png"
-                        cv2.imwrite(path, thresh)
+                        mask_path = "uploads/mask_"+mask_name+".png"
+                        cv2.imwrite(mask_path, thresh)
 
                         mask_values_string = f"{str(v1_min)} {str(v2_min)} {str(v3_min)} {str(v1_max)} {str(v2_max)} {str(v3_max)}"
 
                         # to save image in database
                         img_data = MaskModel(
-                            name=mask_name, filename=path, mask_values=mask_values_string)
+                            name=mask_name, filename=mask_path, orgimage = path,mask_values=mask_values_string)
                         sess.add(img_data)
                         sess.commit()
 
                         st.success("Masked Image Saved")
-                    except:
+                    except Exception as e:
                         st.error('Something went wrong')
+                        print(e)
                     break
 
 
@@ -182,8 +183,10 @@ def trackObject():
     imgObj = sess.query(MaskModel).filter_by(name=selImage).first()
     vidObj = sess.query(VideoModel).filter_by(name=selVideo).first()
 
+
     mask_values = tuple(map(int, imgObj.mask_values.split()))
-    st.write(imgObj.mask_values)
+    col1.image(imgObj.filename)
+    col1.image(imgObj.orgimage)
     btn = st.checkbox('Start Tracking')
     window = st.image([])
     if btn:
@@ -193,7 +196,25 @@ def trackObject():
         while next(frame).any():
             window.image(next(frame))
 
+def trackObjectWebcam():
+    images = sess.query(MaskModel).all()
 
+    selImage = st.selectbox(
+        options=[image.name for image in images], label="Select Mask")
+
+    imgObj = sess.query(MaskModel).filter_by(name=selImage).first()
+    st.image(imgObj.filename)
+
+    mask_values = tuple(map(int, imgObj.mask_values.split()))
+    st.write(imgObj.mask_values)
+    btn = st.checkbox('Start Tracking')
+    window = st.image([])
+    if btn:
+        st.text(imgObj)
+        frame = tracker(
+            greenLower=mask_values[:3], greenUpper=mask_values[3:])
+        while next(frame).any():
+            window.image(next(frame))
 
 if selOpt == choices[0]:
     intro()
@@ -206,4 +227,4 @@ elif selOpt == choices[3]:
 elif selOpt == choices[4]:
     trackObject()
 elif selOpt == choices[5]:
-    trackObject()
+    trackObjectWebcam()
