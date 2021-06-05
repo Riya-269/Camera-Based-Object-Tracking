@@ -1,14 +1,15 @@
 from altair.vegalite.v4.api import value
+from imutils import video
 import streamlit as st
 from PIL import Image
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from database import Image as ImageModel, Mask as MaskModel, Video as VideoModel 
+from database import Image as ImageModel, Mask as MaskModel, Video as VideoModel
 import cv2
 import tempfile
-from objectTracking import ObjectTracker
+from masking import trackObject as tracker
 
-engine = create_engine('sqlite:///db.sqlite3')              
+engine = create_engine('sqlite:///db.sqlite3')
 Session = sessionmaker(bind=engine)
 sess = Session()
 
@@ -44,6 +45,7 @@ def intro():
     4. TRACK OBJECT WITH VIDEO
     5. TRACK OBJECT WITH WEBCAM
     """)
+
 
 def saveVideo():
     vid_name = st.text_input("Enter name of Video")
@@ -81,6 +83,7 @@ def saveVideo():
                 except Exception as e:
                     print(e)
                     st.error('An error occured')
+
 
 def saveImage():
     img_name = st.text_input("Enter name of Image")
@@ -176,9 +179,20 @@ def trackObject():
     selVideo = col2.selectbox(
         options=[video.name for video in videos], label="Select Video")
 
-    imgObj = sess.query(MaskModel).filter_by(name = selImage).first()
+    imgObj = sess.query(MaskModel).filter_by(name=selImage).first()
+    vidObj = sess.query(VideoModel).filter_by(name=selVideo).first()
+
+    mask_values = tuple(map(int, imgObj.mask_values.split()))
     st.write(imgObj.mask_values)
-    # source = ObjectTracker()
+    btn = st.checkbox('Start Tracking')
+    window = st.image([])
+    if btn:
+        st.text(imgObj)
+        frame = tracker(
+            greenLower=mask_values[:3], greenUpper=mask_values[3:], video=vidObj.filename)
+        while next(frame).any():
+            window.image(next(frame))
+
 
 
 if selOpt == choices[0]:
