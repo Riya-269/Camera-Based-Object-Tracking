@@ -26,4 +26,3 @@ class ObjectTracker:
                 yield frame
 
             cv2.waitKey(0)
-

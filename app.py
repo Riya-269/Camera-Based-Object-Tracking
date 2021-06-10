@@ -13,7 +13,7 @@ engine = create_engine('sqlite:///db.sqlite3')
 Session = sessionmaker(bind=engine)
 sess = Session()
 
-st.title("Camera Based Object Tracking")
+st.title("CAMERA BASED OBJECT TRACKING")
 
 st.image('title_img_.jpg')
 st.header("Real time object recognition using a webcam and deep learning....")
@@ -38,17 +38,16 @@ def intro():
 
 
     st.markdown(""" 
-    ### Features of project
-    1. Upload Image
-    2. Create MASK OF THE IMAGE
-    3. UPLOAD VIDEO
-    4. TRACK OBJECT WITH VIDEO
-    5. TRACK OBJECT WITH WEBCAM
+    ###
+    STEP.1 Upload image of the object which you want to track.
+    STEP.2 Create mask of the image.
+    STEP.3 Upload the video which have a object you want to track.
+    STEP.4 Track the object with the video
     """)
 
 
 def saveVideo():
-    vid_name = st.text_input("Enter name of Video")
+    vid_name = st.text_input("Enter name of Video")                                                                            
     vid_file = st.file_uploader("Upload your Video")
     btn = st.button("Submit")
 
