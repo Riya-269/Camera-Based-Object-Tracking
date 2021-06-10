@@ -39,10 +39,14 @@ def trackObject(greenLower=(30, 76, 45), greenUpper=(67, 182, 197), video=None):
         # if we are viewing a video and we did not grab a frame,
         # then we have reached the end of the video
         if frame is None:
+            # print('frame not found')
             break
+        else:
+            # print('frame')
+            pass
 
-        # resize the frame, blur it, and convert it to the HSV
-        # color space
+            # resize the frame, blur it, and convert it to the HSV
+            # color space
         frame = imutils.resize(frame, width=600)
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)

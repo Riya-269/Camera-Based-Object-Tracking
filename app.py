@@ -9,7 +9,7 @@ import cv2
 import tempfile
 from masking import trackObject as tracker
 
-engine = create_engine('sqlite:///db.sqlite3')
+engine = create_engine('sqlite:///db.sqlite3?check_same_thread=False')
 Session = sessionmaker(bind=engine)
 sess = Session()
 
@@ -33,9 +33,8 @@ def intro():
     st.subheader("For Example:")
 
     col1 = st.beta_columns(1)
-    
-    st.image('example.mp5.gif')
 
+    st.image('example.mp5.gif')
 
     st.markdown(""" 
     ###
@@ -157,7 +156,7 @@ def createMask():
 
                         # to save image in database
                         img_data = MaskModel(
-                            name=mask_name, filename=mask_path, orgimage = path,mask_values=mask_values_string)
+                            name=mask_name, filename=mask_path, orgimage=path, mask_values=mask_values_string)
                         sess.add(img_data)
                         sess.commit()
 
@@ -182,18 +181,26 @@ def trackObject():
     imgObj = sess.query(MaskModel).filter_by(name=selImage).first()
     vidObj = sess.query(VideoModel).filter_by(name=selVideo).first()
 
-
     mask_values = tuple(map(int, imgObj.mask_values.split()))
     col1.image(imgObj.filename)
     col1.image(imgObj.orgimage)
     btn = st.checkbox('Start Tracking')
     window = st.image([])
     if btn:
-        st.text(imgObj)
-        frame = tracker(
+        frameGen = tracker(
             greenLower=mask_values[:3], greenUpper=mask_values[3:], video=vidObj.filename)
-        while next(frame).any():
-            window.image(next(frame))
+        while True:
+            try:
+                if not next(frameGen).any():
+                    print('frames ended')
+                    break
+                frame = next(frameGen)
+                window.image(frame)
+            except Exception as e:
+                print(e)
+                # st.error('Somthing went wrong')
+                break
+
 
 def trackObjectWebcam():
     images = sess.query(MaskModel).all()
@@ -214,6 +221,7 @@ def trackObjectWebcam():
             greenLower=mask_values[:3], greenUpper=mask_values[3:])
         while next(frame).any():
             window.image(next(frame))
+
 
 if selOpt == choices[0]:
     intro()
