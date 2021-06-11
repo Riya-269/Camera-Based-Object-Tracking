@@ -38,10 +38,10 @@ def intro():
 
     st.markdown(""" 
     ###
-    STEP.1 Upload image of the object which you want to track.
-    STEP.2 Create mask of the image.
-    STEP.3 Upload the video which have a object to track.
-    STEP.4 Track the object with the video.
+    STEP1. Upload image of the object which you want to track.
+    STEP2. Create mask of the image.
+    STEP3. Upload the video which have a object to track.
+    STEP4. Track the object with the video.
     """)
 
 
