@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 from database import Image as ImageModel, Mask as MaskModel, Video as VideoModel
 import cv2
 import tempfile
-from masking import trackObject as tracker
+from masking import Object_Tracker
 
 engine = create_engine('sqlite:///db.sqlite3?check_same_thread=False')
 Session = sessionmaker(bind=engine)
@@ -32,9 +32,9 @@ def intro():
 
     st.subheader("For Example:")
 
-    col1 = st.beta_columns(1)
+    col1, col2 = st.beta_columns(2)
 
-    st.image('example.mp5.gif')
+    col1.image('example.mp5.gif')
 
     st.markdown(""" 
     ###
@@ -187,8 +187,9 @@ def trackObject():
     btn = st.checkbox('Start Tracking')
     window = st.image([])
     if btn:
-        frameGen = tracker(
-            greenLower=mask_values[:3], greenUpper=mask_values[3:], video=vidObj.filename)
+        track = Object_Tracker(greenLower=mask_values[:3], greenUpper=mask_values[3:], video=vidObj.filename)
+
+        frameGen = track.trackObject()
         while True:
             try:
                 if not next(frameGen).any():
