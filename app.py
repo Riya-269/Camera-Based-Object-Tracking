@@ -217,11 +217,20 @@ def trackObjectWebcam():
     btn = st.checkbox('Start Tracking')
     window = st.image([])
     if btn:
-        st.text(imgObj)
-        frame = tracker(
-            greenLower=mask_values[:3], greenUpper=mask_values[3:])
-        while next(frame).any():
-            window.image(next(frame))
+        track = Object_Tracker(greenLower=mask_values[:3], greenUpper=mask_values[3:])
+
+        frameGen = track.trackObject()
+        while True:
+            try:
+                if not next(frameGen).any():
+                    print('frames ended')
+                    break
+                frame = next(frameGen)
+                window.image(frame)
+            except Exception as e:
+                print(e)
+                # st.error('Somthing went wrong')
+                break
 
 
 if selOpt == choices[0]:
