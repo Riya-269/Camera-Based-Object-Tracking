@@ -170,7 +170,8 @@ class Object_Tracker:
         # cv2.destroyAllWindows()
 
     def __del__(self):
-        self.vs.release()
+        if not self.video:
+            self.vs.stop()
         print('Object deleted')
 
 if __name__ == "__main__":
