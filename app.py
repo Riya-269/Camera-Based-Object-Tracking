@@ -46,7 +46,7 @@ def intro():
 
 
 def saveVideo():
-    vid_name = st.text_input("Enter name of Video")                                                                            
+    vid_name = st.text_input("Enter name of Video")
     vid_file = st.file_uploader("Upload your Video")
     btn = st.button("Submit")
 
@@ -187,7 +187,8 @@ def trackObject():
     btn = st.checkbox('Start Tracking')
     window = st.image([])
     if btn:
-        track = Object_Tracker(greenLower=mask_values[:3], greenUpper=mask_values[3:], video=vidObj.filename)
+        track = Object_Tracker(
+            greenLower=mask_values[:3], greenUpper=mask_values[3:], video=vidObj.filename)
 
         frameGen = track.trackObject()
         while True:
@@ -217,7 +218,8 @@ def trackObjectWebcam():
     btn = st.checkbox('Start Tracking')
     window = st.image([])
     if btn:
-        track = Object_Tracker(greenLower=mask_values[:3], greenUpper=mask_values[3:])
+        track = Object_Tracker(
+            greenLower=mask_values[:3], greenUpper=mask_values[3:])
 
         frameGen = track.trackObject()
         while True:
@@ -228,8 +230,7 @@ def trackObjectWebcam():
                 frame = next(frameGen)
                 window.image(frame)
             except Exception as e:
-                print(e)
-                # st.error('Somthing went wrong')
+                st.error(e.__traceback__.tb_lineno)
                 break
 
 
