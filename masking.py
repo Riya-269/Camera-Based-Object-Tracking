@@ -5,12 +5,13 @@ import cv2
 import imutils
 import time
 
+
 class Object_Tracker:
 
     def __init__(self, greenLower=(30, 76, 45), greenUpper=(67, 182, 197), video=None):
-        self.greenLower=greenLower
-        self.greenUpper=greenUpper
-        self.video=video
+        self.greenLower = greenLower
+        self.greenUpper = greenUpper
+        self.video = video
         print('dsds')
 
     def trackObject(self):
@@ -87,7 +88,7 @@ class Object_Tracker:
                     # draw the circle and centroid on the frame,
                     # then update the list of tracked points
                     cv2.circle(frame, (int(x), int(y)),
-                            int(radius), (0, 255, 255), 2)
+                               int(radius), (0, 255, 255), 2)
                     cv2.circle(frame, center, 5, (0, 0, 255), -1)
                     pts.appendleft(center)
 
@@ -135,7 +136,7 @@ class Object_Tracker:
             # the frame
             cv2.putText(
                 frame, direction, (10,
-                                30), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 0, 255), 3
+                                   30), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (0, 0, 255), 3
             )
             cv2.putText(
                 frame,
@@ -174,7 +175,9 @@ class Object_Tracker:
             self.vs.stop()
         print('Object deleted')
 
+
 if __name__ == "__main__":
-    track = Object_Tracker(greenLower=(0, 80, 58), greenUpper=(6, 255, 255), video='example2.mp4')
+    track = Object_Tracker(greenLower=(0, 80, 58), greenUpper=(
+        6, 255, 255), video='example2.mp4')
     for frame in track.trackObject():
         print(frame)
