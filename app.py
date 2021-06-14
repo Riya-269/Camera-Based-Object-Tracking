@@ -8,6 +8,7 @@ from database import Image as ImageModel, Mask as MaskModel, Video as VideoModel
 import cv2
 import tempfile
 from masking import Object_Tracker
+import traceback
 
 engine = create_engine('sqlite:///db.sqlite3?check_same_thread=False')
 Session = sessionmaker(bind=engine)
@@ -229,7 +230,7 @@ def trackObjectWebcam():
                 frame = next(frameGen)
                 window.image(frame)
             except Exception as e:
-                st.error(e.__traceback__.tb_lineno)
+                st.error(traceback.format_exc())
                 break
 
 

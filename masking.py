@@ -73,6 +73,7 @@ class Object_Tracker:
             cnts = imutils.grab_contours(cnts)
             center = None
 
+            # print(cnts)
             # only proceed if at least one contour was found
             if len(cnts) > 0:
                 # find the largest contour in the mask, then use
@@ -101,6 +102,10 @@ class Object_Tracker:
 
                 # check to see if enough points have been accumulated in
                 # the buffer
+                if not len(pts) >= 10:
+                    # print('kkk')
+                    continue
+
                 if counter >= 10 and i == 1 and pts[-10] is not None:
                     # compute the difference between the x and y
                     # coordinates and re-initialize the direction
@@ -150,7 +155,7 @@ class Object_Tracker:
 
             # show the frame to our screen and increment the frame counter
             # cv2.imshow("Frame", frame)
-            key = cv2.waitKey(20) & 0xFF
+            key = cv2.waitKey(0) & 0xFF
             counter += 1
 
             # if the 'q' key is pressed, stop the loop
