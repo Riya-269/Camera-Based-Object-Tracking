@@ -37,12 +37,13 @@ def intro():
 
     col1.image('example.mp5.gif')
 
-    col2.markdown(""" 
+    col2.markdown("""
     
-    ### STEP1. Upload image of the object which you want to track.
-    ### STEP2. Create mask of the image.
-    ### STEP3. Upload the video which have a object to track.
-    ### STEP4. Track the object with the video.
+     ### STEP1. Upload image of the object which you want to track.
+     ### STEP2. Create mask of the image.
+     ### STEP3. Upload the video which have a object to track.
+     ### STEP4. Track the object with the video.
+     ### STEP5. Track the object by using webcam.
     """)
 
 
