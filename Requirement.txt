@@ -3,3 +3,4 @@ opencv-python==4.5.2.52
 Pillow==8.2.0
 streamlit==0.80.0
 SQLAlchemy==1.4.11
+altair==4.1.0
