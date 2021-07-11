@@ -1,5 +1,4 @@
-from altair.vegalite.v4.api import value
-from imutils import video
+
 import streamlit as st
 from PIL import Image
 from sqlalchemy.orm import sessionmaker
